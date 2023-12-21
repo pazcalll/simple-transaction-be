@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -26,9 +28,14 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         //
+        $validated = $request->validated();
+
+        $product = Product::create($validated);
+
+        return responseJson($product);
     }
 
     /**
@@ -50,9 +57,14 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreProductRequest $request, string $id)
     {
         //
+        $validated = $request->validated();
+
+        Product::where('id', $id)->update($validated);
+
+        return responseJson(Product::find($id), 'Updated');
     }
 
     /**
@@ -61,5 +73,9 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+        $product = Product::find($id);
+        Product::where('id', $id)->delete();
+
+        return responseJson($product, 'Deleted');
     }
 }

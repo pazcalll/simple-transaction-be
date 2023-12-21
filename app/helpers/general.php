@@ -1,12 +1,15 @@
 <?php
 
 if (!function_exists('responseJson')) {
-    function responseJson($data, $message = 'OK', $status = 200)
+    function responseJson($data = null, $message = 'OK', $status = 200)
     {
-        return response()->json([
+        $data = [
             'code' => '20000',
-            'message' => $message,
-            'data' => $data,
-        ], $status);
+            'message' => $message
+        ];
+
+        if ($data) $data['data'] = $data;
+
+        return response()->json($data, $status);
     }
 }
