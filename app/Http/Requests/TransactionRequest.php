@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,12 @@ class TransactionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $product = Product::where('user_id', auth()->user()->id)
+            ->where('id', request()->product_id)
+            ->exists();
+
+        if (!$product) throw new \Exception('Product not found.', 404);
+
         return [
             //
             'quantity' => ['required', 'integer', 'min:1'],

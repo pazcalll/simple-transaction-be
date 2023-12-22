@@ -17,14 +17,18 @@ class TransactionService
         return $transactions;
     }
 
-    public static function create(Product $product, int $quantity): Transaction
+    public static function create(Product $product, int $quantity, string $reference): Transaction
     {
+        if ($product->stock < $quantity) {
+            throw new \Exception('Insufficient stock.', 400);
+        }
+
         $transaction = Transaction::create([
             'product_id' => $product->id,
             'quantity' => $quantity,
             'payment_amount' => $product->price * $quantity,
             'price' => $product->price,
-            'reference_no' => 'INV'.request()->header('X-SIGNATURE')
+            'reference_no' => $reference
         ]);
 
         return $transaction->makeHidden('product_id');

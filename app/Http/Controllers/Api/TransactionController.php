@@ -41,7 +41,7 @@ class TransactionController extends Controller
         $validated = $request->validated();
         $product = Product::find($validated['product_id']);
 
-        $transaction = TransactionService::create($product, $validated['quantity']);
+        $transaction = TransactionService::create($product, $validated['quantity'], 'INV'.request()->header('X-SIGNATURE'));
 
         return responseJson($transaction);
     }
