@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Cache;
 
 class TransactionController extends Controller
 {
-    public function __construct() {
-        $this->middleware('transaction.header')->only(['store']);
-    }
+    // public function __construct() {
+    //     $this->middleware('transaction.header')->only(['store']);
+    // }
     /**
      * Display a listing of the resource.
      */
@@ -43,7 +43,7 @@ class TransactionController extends Controller
             $validated = $request->validated();
             $product = Product::find($validated['product_id']);
 
-            $transaction = TransactionService::create($product, $validated['quantity'], 'INV'.request()->header('X-SIGNATURE'));
+            $transaction = TransactionService::create($product, $validated['quantity']);
 
             return responseJson($transaction);
         });
