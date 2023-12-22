@@ -29,4 +29,5 @@ Route::middleware('auth:api')->group(function() {
     Route::get('authenticate', [AuthController::class, 'index']);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('products', ProductController::class);
+    Route::delete('logout', [AuthController::class, 'destroy']);
 });

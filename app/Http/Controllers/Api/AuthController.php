@@ -36,6 +36,7 @@ class AuthController extends Controller
     }
 
     public function destroy() {
-        
+        auth()->user()->tokens()->delete();
+        return responseJson(null, 'Logged out');
     }
 }

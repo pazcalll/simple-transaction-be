@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Http;
 class TransactionService
 {
     public static function index(int $userId, ?string $keyword) {
-        $transactions = Transaction::whereHas('product', function ($query) use ($userId) {
+        $transactions = Transaction::with('product')
+            ->whereHas('product', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             })
             ->searchByKeyword($keyword)
