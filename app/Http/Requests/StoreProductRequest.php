@@ -24,8 +24,8 @@ class StoreProductRequest extends FormRequest
     {
         return [
             //
-            'name' => ['required', 'string', 'max:255'],
-            'stock' => ['required', 'integer', 'min:1'],
+            'name' => ['required', 'string', 'min:3'],
+            'stock' => ['required', 'integer', 'min:0'],
             'price' => ['required', 'integer', 'min:100'],
             'description' => ['required', 'string', 'max:50'],
         ];
