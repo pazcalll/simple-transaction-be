@@ -31,6 +31,9 @@ class TransactionService
             'reference_no' => $reference
         ]);
 
+        $product->stock -= $quantity;
+        $product->save();
+
         return $transaction->makeHidden('product_id');
     }
 }

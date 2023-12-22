@@ -7,6 +7,7 @@ use App\Http\Requests\TransactionRequest;
 use App\Models\Product;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TransactionController extends Controller
 {
@@ -38,12 +39,16 @@ class TransactionController extends Controller
     public function store(TransactionRequest $request)
     {
         //
-        $validated = $request->validated();
-        $product = Product::find($validated['product_id']);
+        $cache = Cache::lock('transaction', 5)->block(5, function () use ($request) {
+            $validated = $request->validated();
+            $product = Product::find($validated['product_id']);
 
-        $transaction = TransactionService::create($product, $validated['quantity'], 'INV'.request()->header('X-SIGNATURE'));
+            $transaction = TransactionService::create($product, $validated['quantity'], 'INV'.request()->header('X-SIGNATURE'));
 
-        return responseJson($transaction);
+            return responseJson($transaction);
+        });
+
+        return $cache;
     }
 
     /**
