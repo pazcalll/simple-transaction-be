@@ -24,7 +24,7 @@ class AuthController extends Controller
         if (!auth()->attempt($validated)) {
             return responseJson([
                 'message' => 'Invalid credentials'
-            ], 401);
+            ], null, 401);
         }
 
         $user = User::where('username', $validated['username'])->first();
