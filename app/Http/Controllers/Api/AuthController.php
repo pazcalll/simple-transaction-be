@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     //
+    public function index() {
+        $user = auth()->user();
+
+        return responseJson($user);
+    }
+
     public function store() {
         $validated = request()->validate([
             'username' => 'required',

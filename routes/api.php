@@ -26,6 +26,7 @@ Route::post('authenticate', [AuthController::class, 'store']);
 Route::apiResource('users', UserController::class);
 
 Route::middleware('auth:api')->group(function() {
+    Route::get('authenticate', [AuthController::class, 'index']);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('products', ProductController::class);
 });

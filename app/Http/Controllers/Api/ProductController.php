@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = ProductService::index(auth()->user()->id, request()->keyword);
+        $products = ProductService::index(auth()->user()->id, request()->keyword, request()->per_page);
 
         return $products;
     }
