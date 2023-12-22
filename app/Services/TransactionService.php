@@ -7,6 +7,16 @@ use App\Models\Transaction;
 
 class TransactionService
 {
+    public static function index(int $userId, ?string $keyword) {
+        $transactions = Transaction::whereHas('product', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->searchByKeyword($keyword)
+            ->paginate();
+
+        return $transactions;
+    }
+
     public static function create(Product $product, int $quantity): Transaction
     {
         $transaction = Transaction::create([

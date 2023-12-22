@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,6 +16,9 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $products = ProductService::index(auth()->user()->id, request()->keyword);
+
+        return $products;
     }
 
     /**
@@ -31,7 +35,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         //
+        // dd('asdf');
         $validated = $request->validated();
+        $validated['user_id'] = auth()->user()->id;
 
         $product = Product::create($validated);
 

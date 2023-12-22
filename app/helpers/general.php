@@ -3,13 +3,13 @@
 if (!function_exists('responseJson')) {
     function responseJson($data = null, $message = 'OK', $status = 200)
     {
-        $data = [
+        $response = [
             'code' => '20000',
             'message' => $message
         ];
 
-        if ($data) $data['data'] = $data;
+        if ($data) $response['data'] = $data;
 
-        return response()->json($data, $status);
+        return response()->json($response, $status);
     }
 }

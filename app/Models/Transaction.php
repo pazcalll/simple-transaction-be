@@ -21,4 +21,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function scopeSearchByKeyword($query, ?string $keyword) {
+        $query->when($keyword, function ($query) use ($keyword) {
+            $query->where('reference_no', 'like', '%' . $keyword . '%');
+        });
+    }
 }

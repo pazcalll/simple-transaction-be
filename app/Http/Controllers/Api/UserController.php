@@ -3,25 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TransactionRequest;
-use App\Models\Product;
-use App\Services\TransactionService;
+use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class UserController extends Controller
 {
-    public function __construct() {
-        $this->middleware('transaction.header')->only(['store']);
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $transactions = TransactionService::index(auth()->user()->id, request()->keyword);
-
-        return $transactions;
     }
 
     /**
@@ -35,15 +28,20 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TransactionRequest $request)
+    public function store(UserRequest $request)
     {
         //
         $validated = $request->validated();
-        $product = Product::find($validated['product_id']);
+        $validated['password'] = bcrypt($validated['password']);
 
-        $transaction = TransactionService::create($product, $validated['quantity']);
+        $user = User::create($validated);
 
-        return responseJson($transaction);
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return responseJson([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
     /**
